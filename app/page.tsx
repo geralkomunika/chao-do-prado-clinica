@@ -40,3 +40,4 @@ export default function Home(){
 
  <footer className="muted">Protótipo técnico. Não introduzir dados reais de pacientes antes da validação de segurança, RGPD e backups.</footer></main>
 }
+
