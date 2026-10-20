@@ -68,3 +68,30 @@ Abre http://localhost:3000/login.
 ## Observação
 
 O projeto **não** foi publicado na Vercel, não foi ligado a um Supabase real e não foram realizados testes end-to-end. É uma base de implementação, não uma instalação em produção.
+
+
+## Continuação do desenvolvimento — versão 2
+
+Esta versão mostra erros de autenticação mais específicos no login, para distinguir `email_not_confirmed` de `invalid_credentials`. Não ignora nem contorna a verificação de email.
+
+### Conta de teste sem acesso ao email anterior
+
+1. No Supabase Dashboard, em Authentication → Users, crie **um novo utilizador de teste** com um endereço de email a que tenha acesso e palavra-passe forte. Confirme-o através do mecanismo oficial do Supabase.
+2. Confirme no SQL Editor que o perfil foi criado e ative **apenas essa conta**, substituindo o UUID no comando abaixo pelo UUID exato de Authentication → Users:
+
+```sql
+update public.profiles
+set name='Administrador de teste', role='admin', active=true
+where id='UUID_DO_NOVO_UTILIZADOR'
+returning id,name,role,active;
+```
+
+3. Teste o login. Não partilhe a palavra-passe nem chaves de API.
+
+### Equipa
+
+O formulário **Equipa → Convidar colaborador** exige `SUPABASE_SERVICE_ROLE_KEY` nas variáveis de ambiente **do servidor Vercel**. Esta chave é secreta, nunca deve ser colocada num nome `NEXT_PUBLIC_`, nem no GitHub. O convite depende de envio de email pelo Supabase; sem acesso ao email do destinatário, o colaborador não conseguirá aceitar o convite.
+
+### Limitações antes de produção
+
+Não usar dados reais de pacientes até validar RLS, fluxos de autorização, política de backups, segurança das sessões, gestão de incidentes, RGPD e testes de concorrência. A confirmação do deploy não equivale a certificação de segurança.
