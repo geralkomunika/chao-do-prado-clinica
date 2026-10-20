@@ -1,0 +1,5 @@
+'use client'
+import {useState} from 'react'
+import {useRouter} from 'next/navigation'
+import {supabase} from '../../lib/supabase'
+export default function Login(){const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);const router=useRouter();async function submit(e:React.FormEvent){e.preventDefault();setBusy(true);setError('');const {error}=await supabase.auth.signInWithPassword({email,password});setBusy(false);if(error)setError('Não foi possível iniciar sessão. Verifica as credenciais.');else router.replace('/')}return <main className="login"><form className="panel" onSubmit={submit}><img src="/logo.png" alt="Chão do Prado" width="110" height="110"/><h1>Chão do Prado</h1><p>Gestão Clínica · Acesso reservado</p><label>Email<input type="email" required value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Palavra-passe<input type="password" required value={password} onChange={e=>setPassword(e.target.value)}/></label>{error&&<p role="alert" className="error">{error}</p>}<button disabled={busy}>{busy?'A entrar...':'Entrar'}</button></form></main>}
